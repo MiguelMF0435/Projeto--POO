@@ -1,3 +1,6 @@
+from mixins import ManutenivelMixin
+from mixins import AbastecivelMixin
+
 class VeiculoBase(ManutenivelMixin, AbastecivelMixin):
     """
     Classe base para representar um veículo da frota.

@@ -15,13 +15,14 @@ class BancoDeDados:
 
         se não existir o arquivo, cria um arquivo de base de dados vazio
         '''
-        if not os.self.exists(self.__arquivo):
-            return.self.__estrutura_vazia()
+        if not os.path.exists(self.__arquivo):
+            return self._estrutura_vazia()
 
-        try with open(self.__arquivo, "r", encoding="utf-8") as arquivo:
-            dados = json.load(arquivo)
+        try:
+            with open(self.__arquivo, "r", encoding="utf-8") as arquivo:
+                dados = json.load(arquivo)
 
-            return dados
+                return dados
 
         except (json.JSONDecodeError, FileNotFoundError):
 
@@ -40,14 +41,20 @@ class BancoDeDados:
             ) 
 
     def adicionar(self, categoria, registro):
-        '''
-        adiciona uma nova categoria no banco de dados
-        '''
+        if categoria not in self.CATEGORIAS:
+            raise ValueError(f"Categoria inválida: {categoria}")
+
         dados = self.carregar()
-        if categoria not in dados:
-            dados[categoria] = []
-            dados [categoria].append(registro)
-            self.salvar(dados)
+        dados[categoria].append(registro)
+        self.salvar(dados)
+
+
+    def listar(self, categoria):
+        if categoria not in self.CATEGORIAS:
+            raise ValueError(f"Categoria inválida: {categoria}")
+
+        dados = self.carregar()
+        return dados[categoria]
     
     def _estrutura_vazia(self):
         '''
@@ -61,3 +68,4 @@ class BancoDeDados:
             "manutencoes": [],
             "abastecimentos": []
         }
+    
