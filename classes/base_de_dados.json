@@ -1,5 +1,16 @@
 {
-    "veiculos": [],
+    "veiculos": [
+        {
+            "placa": "22222JJJ",
+            "marca": "caro",
+            "modelo": "b2",
+            "tipo": "Carro",
+            "ano": 2026,
+            "quilometragem": 100.0,
+            "consumo_medio": 14.0,
+            "status": "novo"
+        }
+    ],
     "motoristas": [],
     "viagens": [],
     "manutencoes": [],

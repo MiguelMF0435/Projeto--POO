@@ -1,71 +1,71 @@
 import json
-import os
+from pathlib import Path
+
 
 class BancoDeDados:
-    '''
-    Classe responsável por armazenar dados no sistema e carrega-los depois
-    Salva os dados no arquivo banco_de_dados.json
-    '''
-    def __init__ (self, arquivo="base_de_dados.json"):
-        self.__arquivo = arquivo
+    """Leitura e gravação dos registros em base_de_dados.json."""
 
-    def carregar (self):
-        '''
-        carrega os dados existentes no banco de dados
+    CATEGORIAS = (
+        "veiculos", "motoristas", "viagens",
+        "manutencoes", "abastecimentos"
+    )
 
-        se não existir o arquivo, cria um arquivo de base de dados vazio
-        '''
-        if not os.path.exists(self.__arquivo):
-            return self._estrutura_vazia()
+    def __init__(self, arquivo=None):
+        self.__arquivo = (
+            Path(arquivo) if arquivo
+            else Path(__file__).resolve().parent / "base_de_dados.json"
+        )
+
+    def _estrutura_vazia(self):
+        return {categoria: [] for categoria in self.CATEGORIAS}
+
+    def carregar(self):
+        if not self.__arquivo.exists():
+            dados = self._estrutura_vazia()
+            self.salvar(dados)
+            return dados
 
         try:
-            with open(self.__arquivo, "r", encoding="utf-8") as arquivo:
+            with self.__arquivo.open("r", encoding="utf-8") as arquivo:
                 dados = json.load(arquivo)
+        except json.JSONDecodeError as erro:
+            raise ValueError(
+                f"{self.__arquivo.name} contém JSON inválido. "
+                "O arquivo foi preservado; corrija-o antes de continuar."
+            ) from erro
 
-                return dados
+        if not isinstance(dados, dict):
+            raise ValueError("A estrutura do JSON deve ser um objeto.")
 
-        except (json.JSONDecodeError, FileNotFoundError):
+        estrutura = self._estrutura_vazia()
+        for categoria in self.CATEGORIAS:
+            registros = dados.get(categoria, [])
+            if not isinstance(registros, list):
+                raise ValueError(f"A categoria '{categoria}' deve ser uma lista.")
+            estrutura[categoria] = registros
+        return estrutura
 
-            return self.__estrutura_vazia()
+    def salvar(self, dados):
+        self.__arquivo.parent.mkdir(parents=True, exist_ok=True)
+        estrutura = self._estrutura_vazia()
+        for categoria in self.CATEGORIAS:
+            estrutura[categoria] = dados.get(categoria, [])
 
-    def salvar (self, dados):
-        '''
-        salva os arquivos no json
-        '''
-        with open(self.__arquivo,"w",encoding = "utf-8") as arquivo:
-            json.dump(
-                dados,
-                arquivo,
-                ensure_ascii = False,
-                indent = 4
-            ) 
+        conteudo = json.dumps(
+            estrutura, ensure_ascii=False, indent=4, allow_nan=False
+        )
+        temporario = self.__arquivo.with_suffix(".tmp")
+        temporario.write_text(conteudo, encoding="utf-8")
+        temporario.replace(self.__arquivo)
 
     def adicionar(self, categoria, registro):
         if categoria not in self.CATEGORIAS:
             raise ValueError(f"Categoria inválida: {categoria}")
-
         dados = self.carregar()
         dados[categoria].append(registro)
         self.salvar(dados)
 
-
     def listar(self, categoria):
         if categoria not in self.CATEGORIAS:
             raise ValueError(f"Categoria inválida: {categoria}")
-
-        dados = self.carregar()
-        return dados[categoria]
-    
-    def _estrutura_vazia(self):
-        '''
-        Retorna a estrutura inicial do banco de dados.
-        '''
-
-        return {
-            "veiculos": [],
-            "motoristas": [],
-            "viagens": [],
-            "manutencoes": [],
-            "abastecimentos": []
-        }
-    
+        return self.carregar()[categoria]

@@ -1,24 +1,24 @@
 class ManutenivelMixin:
-    """
-    Define a capacidade de um objeto possuir e registrar
-    informações relacionadas a manutenções.
-    """
+    """Adiciona ao veículo a capacidade de registrar manutenções."""
 
-    def registrar_manutencao(self):
-        """
-        Registra uma manutenção para o objeto.
-        """
-        pass
+    def registrar_manutencao(self, manutencao):
+        if not hasattr(self, "_historico_manutencoes"):
+            self._historico_manutencoes = []
+        self._historico_manutencoes.append(manutencao)
+
+    @property
+    def historico_manutencoes(self):
+        return list(getattr(self, "_historico_manutencoes", []))
 
 
 class AbastecivelMixin:
-    """
-    Define a capacidade de um objeto possuir e registrar
-    informações relacionadas a abastecimentos.
-    """
+    """Adiciona ao veículo a capacidade de registrar abastecimentos."""
 
-    def abastecer(self):
-        """
-        Registra um abastecimento para o objeto.
-        """
-        pass
+    def abastecer(self, abastecimento):
+        if not hasattr(self, "_historico_abastecimentos"):
+            self._historico_abastecimentos = []
+        self._historico_abastecimentos.append(abastecimento)
+
+    @property
+    def historico_abastecimentos(self):
+        return list(getattr(self, "_historico_abastecimentos", []))
