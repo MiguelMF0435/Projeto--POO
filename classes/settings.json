@@ -1,0 +1,22 @@
+{
+    "limite_km_revisao_preventiva": 10000,
+    "consumo_minimo_km_l": {
+        "Carro": 5.0,
+        "Moto": 15.0,
+        "Caminhão": 2.0
+    },
+    "consumo_maximo_km_l": {
+        "Carro": 25.0,
+        "Moto": 45.0,
+        "Caminhão": 8.0
+    },
+    "custos_manutencao": {
+        "preventiva": 250.0,
+        "corretiva": 500.0
+    },
+    "cnh_minima": {
+        "Moto": "A",
+        "Carro": "B",
+        "Caminhão": "C"
+    }
+}

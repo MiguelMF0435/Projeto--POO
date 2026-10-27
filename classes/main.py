@@ -1,4 +1,12 @@
 """CLI do Sistema de Gerenciamento de Frota de Veículos."""
+import sys
+from pathlib import Path
+
+PASTA_CLASSES = str(Path(__file__).resolve().parent)
+
+if PASTA_CLASSES not in sys.path:
+    sys.path.insert(0, PASTA_CLASSES)
+    
 from datetime import datetime
 import json
 from pathlib import Path
