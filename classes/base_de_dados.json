@@ -9,6 +9,23 @@
             "quilometragem": 100.0,
             "consumo_medio": 14.0,
             "status": "novo"
+        },
+        {
+            "placa": "ASD5555",
+            "marca": "efwef]",
+            "modelo": "dad",
+            "tipo": "Carro",
+            "ano": 2006,
+            "quilometragem": 4984.0,
+            "consumo_medio": 15.0,
+            "status": "ATIVO",
+            "historico_eventos": [
+                {
+                    "data": "2026-11-02T01:56:53",
+                    "evento": "entrada"
+                }
+            ],
+            "km_ultima_revisao_preventiva": 4984.0
         }
     ],
     "motoristas": [],
