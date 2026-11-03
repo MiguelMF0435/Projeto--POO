@@ -1,7 +1,7 @@
 """Serviços de aplicação: regras de negócio independentes da CLI."""
 from __future__ import annotations
 from typing import Any
-from tests.exceptions import AlocacaoInvalidaError, PoliticaNaoAtendidaError
+from exceptions import AlocacaoInvalidaError, PoliticaNaoAtendidaError
 from pessoa import Motorista
 from veiculos import StatusVeiculo, VeiculoBase
 

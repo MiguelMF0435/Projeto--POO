@@ -26,7 +26,7 @@ from pessoa import Motorista
 from viagem import Viagem
 from registros import Manutencao, Abastecimento
 from servicos import FrotaService
-from tests.exceptions import (
+from exceptions import (
     AlocacaoInvalidaError,
     ManutencaoInvalidaError,
     PoliticaNaoAtendidaError,
@@ -633,7 +633,7 @@ def registrar_viagem() -> None:
     dados = banco.carregar()
     dados["viagens"].append(viagem)
 
-    entidade_veiculo.atualizar_quilometragem(distancia)
+    entidade_veiculo.atualizar_quilometragem(entidade_veiculo.quilometragem + distancia)
     entidade_veiculo.registrar_evento({
         "data": viagem["data"], "evento": "saída/viagem", "distancia": distancia
     })
