@@ -152,19 +152,21 @@ class VeiculoBase(ManutenivelMixin, AbastecivelMixin):
         self._historico_viagens.append(viagem)
         self.registrar_evento({"evento": "viagem", "viagem": viagem})
 
-    def atualizar_quilometragem(self, distancia: float) -> None:
-        """Soma a distância percorrida à quilometragem acumulada do veículo.
+    def atualizar_quilometragem(self, nova_quilometragem: float) -> None:
+        """Atualiza a quilometragem acumulada para um novo valor absoluto.
 
         Args:
-            distancia: Distância percorrida desde a última atualização, em km.
+            nova_quilometragem: Nova leitura do odômetro, em km.
 
         Raises:
-            ValueError: Se a distância for negativa.
+            ValueError: Se o valor for negativo ou menor que a quilometragem atual.
         """
-        incremento = float(distancia)
-        if incremento < 0:
-            raise ValueError("A distância percorrida não pode ser negativa.")
-        self.__quilometragem += incremento
+        novo = float(nova_quilometragem)
+        if novo < 0:
+            raise ValueError("A quilometragem não pode ser negativa.")
+        if novo < self.quilometragem:
+            raise ValueError("A quilometragem informada é menor que a atual.")
+        self.quilometragem = novo
 
     def alterar_status(self, novo_status: StatusVeiculo | str) -> None:
         novo = StatusVeiculo.normalizar(novo_status)

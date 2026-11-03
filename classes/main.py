@@ -633,7 +633,7 @@ def registrar_viagem() -> None:
     dados = banco.carregar()
     dados["viagens"].append(viagem)
 
-    entidade_veiculo.atualizar_quilometragem(distancia)
+    entidade_veiculo.atualizar_quilometragem(entidade_veiculo.quilometragem + distancia)
     entidade_veiculo.registrar_evento({
         "data": viagem["data"], "evento": "saída/viagem", "distancia": distancia
     })

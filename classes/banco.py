@@ -39,7 +39,7 @@ class RepositorioJSON(RepositorioBase):
         except json.JSONDecodeError as erro:
             raise ValueError(f"O arquivo {self._arquivo} contém JSON inválido; ele foi preservado.") from erro
         except OSError as erro:
-            from exceptions import RepositorioError
+            from tests.exceptions import RepositorioError
             raise RepositorioError(f"Não foi possível ler {self._arquivo}: {erro}") from erro
         if not isinstance(dados, dict):
             raise ValueError("A estrutura do banco JSON deve ser um objeto.")
@@ -65,7 +65,7 @@ class RepositorioJSON(RepositorioBase):
             temporario.write_text(conteudo, encoding="utf-8")
             temporario.replace(self._arquivo)
         except OSError as erro:
-            from exceptions import RepositorioError
+            from tests.exceptions import RepositorioError
             temporario.unlink(missing_ok=True)
             raise RepositorioError(f"Não foi possível salvar {self._arquivo}: {erro}") from erro
 
@@ -127,7 +127,7 @@ class RepositorioSQLite(RepositorioBase):
                     linhas = conexao.execute(f'SELECT registro FROM "{categoria}" ORDER BY id').fetchall()
                     dados[categoria] = [json.loads(linha[0]) for linha in linhas]
         except self._sqlite3.Error as erro:
-            from exceptions import RepositorioError
+            from tests.exceptions import RepositorioError
             raise RepositorioError(f"Falha ao consultar SQLite: {erro}") from erro
         return dados
 
@@ -142,7 +142,7 @@ class RepositorioSQLite(RepositorioBase):
                          for registro in dados.get(categoria, [])]
                     )
         except (self._sqlite3.Error, TypeError, ValueError) as erro:
-            from exceptions import RepositorioError
+            from tests.exceptions import RepositorioError
             raise RepositorioError(f"Falha ao salvar no SQLite: {erro}") from erro
 
     def adicionar(self, categoria: str, registro: dict[str, Any]) -> None:
